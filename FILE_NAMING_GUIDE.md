@@ -17,10 +17,12 @@ Sperm {sperm_id}/
 ├── mitochondria_stack_{sperm_id}.tif           ⚠️ REQUIRED FOR 3D RECONSTRUCTION
 │
 ├── MO tracking/
-│   └── temp_long.csv                           (or any naming)
+│   ├── MTrackJ_output_16_MO.csv                (original ImageJ output)
+│   └── temp_long.csv                           (processed/filtered tracking)
 │
 └── Mito tracking/
-    └── temp_long.csv                           (or any naming)
+    ├── MTrackJ_output_16_mito.csv              (original ImageJ output)
+    └── temp_long.csv                           (processed/filtered tracking)
 ```
 
 **Key requirement**: For **mitochondria and MO**, you MUST have **both versions** in your folder:
@@ -97,34 +99,5 @@ Subdirectory locations:
 | **Sperm ID must match** | Prevents accidental mixing of data from different cells. |
 | **Case/spacing is flexible** | Makes naming more forgiving; "MO_16.tif" and "mo 16.tif" both work. |
 
----
 
----
-
----
-
-## Troubleshooting
-
-### "No [organelle] file found" Error
-**Cause**: File naming doesn't match expected pattern or file doesn't exist.
-
-**Solutions**:
-- Check file exists in correct directory: `Sperm {sperm_id}/`
-- Verify organelle name matches accepted names (nucleus, pseudopod, mitochondria, MO, sperm_cell)
-- **For mitochondria/MO**: Ensure you have BOTH versions present (`_registration` AND without suffix)
-- Verify registration suffix if applicable
-- Check for typos and correct file extension (`.tif`, not `.tiff`)
-
-### "Multiple files found, using first"
-**Cause**: Duplicate files with same organelle/sperm_id exist in directory.
-
-**Solution**: Remove duplicate files or rename to distinguish them.
-
-### Wrong Version Selected (Registered vs. Unregistered)
-**Cause**: Code selected wrong version of file (registered when it needed unregistered, or vice versa).
-
-**Solutions**:
-- Verify files have correct `_registration` suffix in their names
-- Check that tracking CSVs are in correct subdirectories (`MO tracking/` or `Mito tracking/`)
-- If metrics look wrong, verify overlays in TRACKING_OVERLAY_GUIDE.md
 

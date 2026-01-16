@@ -13,29 +13,28 @@ Automated 3D morphometric analysis of sperm cells from SEM image stacks. This pi
 - **Optional Detectron2 integration** for automated mask generation from raw SEM images
 
 **Documentation Files:**
-- [README.md](README.md) - This file, complete pipeline reference
-- [FILE_NAMING_GUIDE.md](FILE_NAMING_GUIDE.md) - File naming conventions and flexible matching
-- [TRACKING_OVERLAY_GUIDE.md](TRACKING_OVERLAY_GUIDE.md) - Comprehensive guide to verify tracking and debug metrics issues
+- [README.md](README.md) - Main reference (this file)
+- [QUICK_START.md](QUICK_START.md) - Get running in 5 minutes
+- [FILE_NAMING_GUIDE.md](FILE_NAMING_GUIDE.md) - File naming conventions
+- [METRICS_REFERENCE.md](METRICS_REFERENCE.md) - Detailed metric definitions and formulas
+- [TRACKING_OVERLAY_GUIDE.md](TRACKING_OVERLAY_GUIDE.md) - Tracking verification guide
+- [TRACKING_OVERLAY_QUICKREF.md](TRACKING_OVERLAY_QUICKREF.md) - One-page tracking quick reference
 - [TRACKMATE_CSV_FORMAT.md](TRACKMATE_CSV_FORMAT.md) - TrackMate CSV format reference
-- [TRACKING_OVERLAY_QUICKREF.md](TRACKING_OVERLAY_QUICKREF.md) - One-page quick reference cheat sheet
+- [Detectron2_Mask_Generation_Colab.ipynb](Detectron2_Mask_Generation_Colab.ipynb) - Automated mask generation template
 
 ---
 
 ## Table of Contents
 
 1. [Biological Context](#biological-context)
-2. [Preprocessing Pipeline](#preprocessing-pipeline)
-3. [Installation](#installation)
-4. [Quick Start](#quick-start)
-5. [Detectron2 Mask Generation](#detectron2-mask-generation-optional)
-6. [Architecture](#architecture)
-7. [Usage Guide](#usage-guide)
-8. [Output Description](#output-description)
-9. [Metrics Reference](#metrics-reference)
-10. [File Organization](#file-organization)
-11. [Tracking Overlay Verification](#tracking-overlay-verification)
-12. [Troubleshooting](#troubleshooting)
-13. [Citation](#citation)
+2. [Quick Start](#quick-start)
+3. [Detectron2 Mask Generation](#detectron2-mask-generation-optional)
+4. [Installation](#installation)
+5. [Architecture](#architecture)
+6. [Usage Guide](#usage-guide)
+7. [Output Description](#output-description)
+8. [Troubleshooting](#troubleshooting)
+9. [Citation](#citation)
 
 ---
 
@@ -755,127 +754,12 @@ Distance = √[(x₁-x₂)² + (y₁-y₂)² + (z₁-z₂)²] × VOXEL_SIZE
 
 ## File Organization
 
-The pipeline uses **flexible file naming** to accommodate various naming schemes. **See [FILE_NAMING_GUIDE.md](FILE_NAMING_GUIDE.md) for complete specifications.**
+**See [FILE_NAMING_GUIDE.md](FILE_NAMING_GUIDE.md) for complete file naming conventions and directory structure specifications.**
 
-Quick summary:
-- **Single organelles** (nucleus, pseudopod, sperm_cell): Always unregistered
-- **Multiple organelles** (mitochondria, MO): Have both registered (for tracking) and unregistered (for 3D) versions
-- **Flexible naming**: Case-insensitive, spacing flexible, "stack" keyword optional
-- **STRICT**: `_registration` suffix determines which version is used
-
-### Directory Structure
-```
-Project Root/
-├── README.md                              (this file)
-├── FILE_NAMING_GUIDE.md                   (naming conventions)
-├── requirements.txt                        (Python dependencies)
-├── Sperm_Cell_Analysis_Pipeline.ipynb     (main analysis notebook)
-│
-├── src/
-│   ├── __init__.py
-│   ├── config.py                          (centralized parameters)
-│   ├── utils.py                           (file discovery, utilities)
-│   ├── metrics.py                         (organelle metrics computation)
-│   ├── spatial_metrics.py                 (spatial analysis)
-│   ├── tracking.py                        (tracking CSV processing)
-│   ├── reconstruction.py                  (3D mesh & visualization)
-│   ├── detectron_inference.py            (model inference helpers)
-│   └── utils.py                           # Utility functions
-│
-├── Sample Data/
-│   └── Sperm {ID}/
-│       ├── nucleus_stack_{ID}.tif
-│       ├── pseudopod_stack_{ID}.tif
-│       ├── sperm_cell_stack_{ID}.tif
-│       ├── mitochondria_stack_{ID}_registration.tif
-│       ├── mitochondria_stack_{ID}.tif
-│       ├── MO_stack_{ID}_registration.tif
-│       ├── MO_stack_{ID}.tif
-│       ├── MO tracking/
-│       │   ├── {tracking_data}.csv
-│       │   └── tracking_overlays/
-│       │       └── {organelle}_overlays/
-│       │           └── frame_001_overlay.png (tracking verification images)
-│       ├── Mito tracking/
-│       │   ├── {tracking_data}.csv
-│       │   └── tracking_overlays/
-│       │       └── {organelle}_overlays/
-│       │           └── frame_001_overlay.png (tracking verification images)
-│       └── Organellar_Measures/
-│           └── sperm_{ID}_all_metrics.csv
-│
-└── outputs/
-    ├── batch_results_all_cells/
-    │   └── all_metrics_batch.xlsx
-    └── Sperm {ID}/
-        ├── spatial_metrics.xlsx
-        └── Sperm_{ID}_rotation.gif
-```
-
----
-
-## Tracking Overlay Verification
-
-### Quick Summary
-
-**Purpose**: Visually verify that the automatic tracking system correctly linked organelles across image slices before running metrics analysis.
-
-**Key Point**: If metrics look wrong for mitochondria (Mito) or MO, **check overlays first** — 90% of the time the problem is in tracking, not the metrics code.
-
-### How to Generate Overlays
-
-**In Notebook (Easiest)**:
-Step 2e in `Sperm_Cell_Analysis_Pipeline.ipynb` generates overlays automatically.
-
-**Programmatically**:
-```python
-from src.tracking import visualize_tracking
-
-overlay_dir = visualize_tracking(
-    tiff_path="Sperm 14/mitochondria_stack_14_registration.tif",
-    csv_path="Sperm 14/Mito tracking/tracking.csv",
-    frames_to_display=200,
-    save_overlays=True
-)
-```
-
-### What to Look For
-
-**✅ Good Tracking**:
-- Red circles with track IDs visible in most frames
-- Same ID stays consistent across frames (track #5 is always #5)
-- Smooth motion, no jumping
-- ~Constant organelle population
-
-**🚨 Bad Tracking**:
-- Many white circles but few/no red circles (no IDs)
-- IDs suddenly change or disappear
-- Circles jump erratically
-- Population varies wildly
-
-### Troubleshooting Tracking Issues
-
-**Problem: Metrics seem unrealistic (e.g., volume = 0, distances = NaN)**
-
-1. Generate overlays for the affected cell
-2. Scan through frames looking for tracking failures
-3. Use the **decision tree** in [TRACKING_OVERLAY_GUIDE.md](TRACKING_OVERLAY_GUIDE.md) to diagnose:
-   - **Few/no track IDs** → Check segmentation or detection threshold
-   - **Erratic circle motion** → Check registration (SEM image jumping)
-   - **ID keeps changing** → Check linking distance parameter
-   - **Blank frames** → Check original TIFF quality
-4. Fix the root cause (re-register, adjust threshold, etc.)
-5. Re-run metrics for that cell
-
-### Where Overlays Are Stored
-
-```
-Sperm {ID}/
-├── Mito tracking/tracking_overlays/mitochondria_overlays/frame_XXX_overlay.png
-└── MO tracking/tracking_overlays/MO_overlays/frame_XXX_overlay.png
-```
-
-**→ See [TRACKING_OVERLAY_GUIDE.md](TRACKING_OVERLAY_GUIDE.md) for complete troubleshooting workflow and visual examples.
+Quick reference:
+- Files use flexible naming (case-insensitive, spacing variations okay)
+- `_registration` suffix indicates registered vs. unregistered versions
+- Tracking CSV files should be in `{organelle} tracking/` subdirectories
 
 ---
 

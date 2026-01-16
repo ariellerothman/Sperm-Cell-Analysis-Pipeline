@@ -373,62 +373,11 @@ Raw TIFF Stacks (ImageJ)
 Excel/CSV Output
 ```
 
-### Key Algorithms
-
-#### 1. **Volume and Surface Area Computation**
-**Algorithm**: Marching Cubes (Lorensen & Cline 1987)
-
-**Input**: 3D binary array (voxelated organelle)
-
-**Process**:
-1. Interpolate binary voxel grid
-2. Find isosurface at threshold 0.5
-3. Generate triangle mesh at surface boundary
-4. Calculate volume as sum of filled voxels × voxel volume
-5. Calculate surface area from triangle mesh
-
-**Output**: Volume (µm³), Surface Area (µm²)
-
-#### 2. **Sphericity Calculation**
-**Formula**: $S = \frac{\pi^{1/3} (3V)^{2/3}}{A}$
-
-Where:
-- $V$ = Volume
-- $A$ = Surface area
-- $S$ = Sphericity (0-1, 1 = perfect sphere)
-
-**Interpretation**:
-- 0.9-1.0: Nearly spherical
-- 0.7-0.9: Moderately elongated
-- <0.7: Highly elongated
-
-#### 3. **Principal Component Analysis (Direction Vector)**
-**Algorithm**: Eigenvalue decomposition of covariance matrix
-
-**Input**: Set of voxel coordinates for organelle
-
-**Process**:
-1. Compute centroid $(x_0, y_0, z_0)$
-2. Center coordinates: $X_i = x_i - x_0$, etc.
-3. Compute covariance matrix: $\Sigma = \frac{1}{N} X^T X$
-4. Eigendecomposition: $\Sigma = U \Lambda U^T$
-5. First eigenvector (largest eigenvalue) = primary direction
-
-**Output**: Direction vector (unit vector) indicating elongation orientation
-
-#### 4. **Distance Calculation**
-**Formula**: Euclidean distance
-
-$$d = \sqrt{(x_1-x_2)^2 + (y_1-y_2)^2 + (z_1-z_2)^2}$$
-
-**Conversion**: Voxel distance → Physical distance (multiply by voxel size)
-
 ### Processing Pipeline (Detailed)
 
 1. **Load Data**
    - Read TIFF stacks (binary masks)
-   - Load tracking CSVs (if available)
-   - Extract centroid locations
+   - Load tracking CSVs 
 
 2. **Single Organelle Processing**
    - Get connected components (scipy.ndimage.label)
@@ -455,30 +404,13 @@ $$d = \sqrt{(x_1-x_2)^2 + (y_1-y_2)^2 + (z_1-z_2)^2}$$
    - Render 60 frames at different rotation angles
    - Save as GIF
 
-### Coordinate Systems
-
-**Image Coordinates** (TIFF stacks):
-- Origin: (0, 0, 0) at top-left-front
-- Units: Pixels/voxels
-- Axes: X (left-right), Y (up-down), Z (front-back)
-
-**Physical Coordinates** (outputs):
-- Units: Micrometers (µm)
-- Conversion: `physical = voxel × voxel_size`
-- Default: PIXEL_SIZE_UM = 0.008 µm, SLICE_THICKNESS_UM = 0.05 µm
-
-**Local Coordinates** (spatial metrics):
-- Origin: Sperm cell centroid
-- Units: Micrometers
-- Used for distance calculations
-
 ---
 
 ## Detectron2 Mask Generation (Optional)
 
 ### Overview
 
-This pipeline can work with binary segmentation masks from **any source** (manual segmentation, thresholding, or deep learning). However, we provide a **Detectron2-based instance segmentation model** trained on sperm cell SEM images for automated mask generation.
+This pipeline can work with binary segmentation masks from manual segmentation or deep learning. However, we provide a **Detectron2-based instance segmentation model** trained on sperm cell SEM images for automated mask generation.
 
 **Key Features:**
 -  **Instance segmentation**: Separately identifies individual organelles
@@ -516,27 +448,6 @@ Binary Mask Stacks (.tif)
         ↓
 Metrics & 3D Reconstruction
 ```
-
-### Model Details
-
-**Architecture**: Mask R-CNN with ResNet-50 FPN  
-**Training Data**: ~50 manually curated sperm cell SEM stacks  
-**Classes**: Nucleus, Pseudopod, Mitochondria, Membranous Organelle (MO), Sperm Cell, Unfused MO  
-**Input Size**: 1024×1024 pixels  
-**Performance**: ~2-5 minutes per 200-slice stack (with GPU in Colab)
-
-### Requesting Model Weights
-
-To request the pre-trained Detectron2 model weights:
-
-**Email**: [ariellerothman@gmail.com]  
-**Subject**: "Sperm Cell Analysis - Model Weights Request"  
-**Include**:
-- Your name and institution
-- Brief description of your project
-- Use case (research, publication, etc.)
-
-We'll respond with download instructions. Weights are distributed freely for research purposes.
 
 ---
 
@@ -626,257 +537,13 @@ The pipeline provides three main workflows:
 | distance_pseudopod_tip_to_target_um | Distance from pseudopod tip to spermathecal valve | micrometers |
 | angle_between_direction_and_target_vector_deg | Angle between pseudopod orientation and direction toward valve | degrees |
 
-**Interpretation**:
-- **Small centroid distance**: Sperm cell positioned close to spermathecal valve
-- **Small angle (0°)**: Pseudopod oriented directly toward valve (favorable for fertilization)
-- **Large angle (180°)**: Pseudopod oriented away from valve (unfavorable positioning)
-
-### 3D Reconstruction Video
-**File**: `Sperm_{ID}_rotation.gif`
-
-**Content**: Animated 360° orbit view showing all organelles with colors:
-- 🟢 Green: Sperm cell boundary (translucent)
-- 🟤 Brown/Dark Green: Pseudopod
-- ⚫ Black: Nucleus
-- 🟠 Orange: Mitochondria
-- 🟣 Purple: Membranous organelles (MO)
-
----
-
-## Metrics Reference
-
-### Volume
-**Definition**: Total voxel count × voxel volume
-
-**Formula**:
-```
-Volume (µm³) = Number_of_Voxels × (PIXEL_SIZE_UM² × SLICE_THICKNESS_UM)
-```
-
-**Biological significance**: Indicates organelle size and metabolic capacity.
-
-### Surface Area
-**Definition**: Computed via marching cubes algorithm, then mesh surface area calculation.
-
-**Biological significance**: Combined with volume (see SA:V ratio below), indicates surface-to-volume efficiency.
-
-### Sphericity
-**Definition**: Measure of how close an object is to a perfect sphere.
-
-**Formula**:
-```
-Sphericity = (π^(1/3) × (6V)^(2/3)) / A
-
-Where:
-  V = Volume (µm³)
-  A = Surface Area (µm²)
-  π^(1/3) ≈ 1.612
-```
-
-**Range**: 0 to 1
-- 1.0 = Perfect sphere
-- 0.5 = Rod-like structure
-- Values < 0.5 = Highly elongated or irregular
-
-**Biological significance**: Abnormally shaped mitochondria (low sphericity) indicate fusion events or incomplete fission.
-
-**Reference**: Hammerquist et al. (2021). Mitochondrial morphology as indicator of metabolic state.
-
-### Surface Area-to-Volume Ratio (SA:V)
-**Definition**: Surface area divided by volume.
-
-**Biological significance**: Indicates capacity for molecular exchange with environment:
-- **High SA:V**: Greater surface for nutrient uptake and waste removal → increased metabolic efficiency
-- **Low SA:V**: Less surface area → potentially reduced metabolic efficiency
-
-**Interpretation**: Spherical mitochondria have higher SA:V than elongated ones with same volume.
-
-### Aspect Ratio
-**Definition**: Ratio of longest to shortest dimension in bounding box.
-
-**Formula**:
-```
-Aspect_Ratio = max(depth, width, height) / min(depth, width, height)
-```
-
-**Range**: ≥ 1.0
-- 1.0 = Cube (equal dimensions)
-- > 2.0 = Highly elongated structure
-- Very high (>10) = Rod or tubular structure
-
-**Biological significance**: Indicates mitochondrial shape changes:
-- High aspect ratio (>3): Tubular, networked mitochondria
-- Low aspect ratio (≈1): Fragmented, round mitochondria (indicates fission)
-
-### Density
-**Definition**: Ratio of object volume to bounding box volume.
-
-**Formula**:
-```
-Density = Organelle_Volume / BoundingBox_Volume
-```
-
-**Range**: 0 to 1
-- 1.0 = Object perfectly fills bounding box (compact)
-- 0.5 = Object fills 50% of bounding box (loose/sparse)
-
-**Biological significance**: Indicates structural compactness and presence of internal voids.
-
-### Direction Vector (Pseudopod Only)
-**Definition**: Principal component from PCA analysis of pseudopod voxel coordinates.
-
-**Method**:
-1. Extract all voxels in pseudopod 3D binary mask
-2. Apply PCA to compute principal axes
-3. First principal component = elongation direction
-
-**Biological significance**: Indicates pseudopod orientation in 3D space:
-- Used to calculate angle toward spermathecal valve
-- Reveals if sperm is "aimed" toward fertilization site
-- 0° = pseudopod pointing directly at valve (favorable)
-- 180° = pseudopod pointing away (unfavorable)
-
-### Distances to Reference Structures
-**Definition**: Euclidean distance between organelle centroid and reference point.
-
-**Calculation**:
-```
-Distance = √[(x₁-x₂)² + (y₁-y₂)² + (z₁-z₂)²] × VOXEL_SIZE
-```
-
-**Reference points**:
-- **Nucleus centroid**: Center of nucleus organelle
-- **Pseudopod centroid**: Center of pseudopod structure
-- **Spermathecal valve**: User-defined reference point (spermathecal valve center in global image space)
-
 ---
 
 ## File Organization
 
 **See [FILE_NAMING_GUIDE.md](FILE_NAMING_GUIDE.md) for complete file naming conventions and directory structure specifications.**
 
-Quick reference:
-- Files use flexible naming (case-insensitive, spacing variations okay)
-- `_registration` suffix indicates registered vs. unregistered versions
-- Tracking CSV files should be in `{organelle} tracking/` subdirectories
-
 ---
-
-## Troubleshooting
-
-### "No [organelle] file found" Error
-**Cause**: File naming doesn't match expected pattern.
-
-**Solutions**:
-1. Check file exists in correct directory: `Sperm {ID}/`
-2. Verify correct file extension (`.tif`, not `.tiff` or `.TIF`)
-3. Review [FILE_NAMING_GUIDE.md](FILE_NAMING_GUIDE.md) for acceptable patterns
-4. Check that organelle name matches expected names (nucleus, pseudopod, mitochondria, MO, sperm_cell)
-
-### "Multiple files found" Warning
-**Cause**: Duplicate files in directory matching same pattern.
-
-**Solution**: Remove duplicate files or rename to distinguish them.
-
-### Tracking CSV Not Found
-**Cause**: CSV naming doesn't match flexible patterns.
-
-**Expected patterns**:
-- `MO_tracking_16.csv` or `MO_tracking_16.csv` or `tracking_MO_16.csv`
-- `mitochondria_tracking_16.csv` or `Mito_tracking_16.csv`
-
-**Solution**: Rename CSV to match one of these patterns or check [FILE_NAMING_GUIDE.md](FILE_NAMING_GUIDE.md).
-
-### 3D Reconstruction Appears Distorted
-**Cause**: Using unregistered images for reconstruction (registered images have corrected distortions that don't match actual voxel positions).
-
-**Solution**: Ensure 3D reconstruction uses **unregistered** TIFF files (no `_registration` suffix).
-
-### Memory Issues During Batch Processing
-**Cause**: Processing very large TIFF stacks (>200 MB each).
-
-**Solutions**:
-1. Process fewer cells per batch (reduce `sperm_ids_to_process` list size)
-2. Pre-downscale TIFF stacks using ImageJ
-3. Increase available RAM or close other applications
-4. Process cells individually instead of batch
-
-### Voxel Size Mismatch
-**Cause**: Using different voxel sizes in different modules.
-
-**Solution**: All voxel sizes defined in `src/config.py`. Verify values match your microscopy calibration:
-```python
-PIXEL_SIZE_UM = 0.008      # Your pixel size in micrometers
-SLICE_THICKNESS_UM = 0.05  # Your Z resolution in micrometers
-```
-
-### Sphericity Calculation Errors
-**Cause**: Marching cubes fails on organelles with too few voxels.
-
-**Solution**: Increase `ORGANELLE_THRESHOLD` in `src/config.py` to segment only robust structures, or manually review masks in ImageJ.
-
-### Unexpected Metrics for Mitochondria or MO
-
-**First, always check tracking overlays:**
-
-```python
-# Generate overlays to verify tracking quality
-from src.tracking import visualize_tracking
-
-overlay_dir = visualize_tracking(
-    tiff_path="path/to/{organelle}_stack_{ID}_registration.tif",
-    csv_path="path/to/Sperm {ID}/{Organelle} tracking/tracking.csv",
-    frames_to_display=200,
-    save_overlays=True
-)
-
-print(f"View overlays at: {overlay_dir}")
-```
-
-**Common causes of bad metrics:**
-
-1. **Tracking failures** (see [Tracking Overlay Verification](#tracking-overlay-verification))
-   - Missing track IDs in some frames
-   - ID jumps or resets between frames
-   - Organelles not being detected at all
-   - **Solution**: Review overlay images; if tracking is bad, fix segmentation or registration and re-run
-
-2. **Segmentation artifacts**
-   - Holes or gaps in organelle masks
-   - Over-segmentation (mask too large)
-   - Under-segmentation (mask too small)
-   - **Solution**: Review masks in ImageJ and manually correct
-
-3. **Registration problems**
-   - Artifacts from stackreg that affect downstream analysis
-   - **Solution**: Check both registered and unregistered TIFF files; may need to re-register with different parameters
-
-4. **Threshold issues**
-   - Organelles too small to process (volume = 0)
-   - **Solution**: Lower `MESH_MIN_SIZE` threshold in `src/config.py`
-
-**Debugging workflow:**
-1. Generate tracking overlays for the problematic cell
-2. Review overlay images for tracking failures (see [Interpreting Overlays](#interpreting-overlays))
-3. If tracking looks good → problem is in segmentation or registration
-4. If tracking looks bad → fix tracking and re-generate overlays
-5. Re-run metrics after fix
-
----
-
-## Citation
-
-If you use this pipeline in your research, please cite:
-
-```bibtex
-@software{sperm_cell_analysis_2024,
-  author = {Rothman, Arielle},
-  title = {Sperm Cell 3D Morphometric Analysis Pipeline},
-  year = {2024},
-  url = {https://github.com/yourusername/sperm-cell-analysis},
-  note = {Python pipeline for quantitative analysis of sperm morphology from SEM image stacks}
-}
-```
 
 ### Related Publications
 - Thévenaz P, et al. (2024). "StackReg: An ImageJ plugin for the alignment of image sequences."
@@ -891,23 +558,12 @@ This project is licensed under the [MIT License](LICENSE) - see LICENSE file for
 
 ---
 
-## Contributing
-
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit changes (`git commit -am 'Add your feature'`)
-4. Push to branch (`git push origin feature/your-feature`)
-5. Open a pull request
-
----
-
 ## Contact & Support
 
 For questions, issues, or suggestions:
 - Open an issue on GitHub
-- Contact: [your email]
-- Institution: [your institution]
+- Contact: arielle.rothman@mail.utoronto.ca
+- Institution: University of Toronto
 
 ---
 

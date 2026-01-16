@@ -1,5 +1,36 @@
 # File Naming Convention Guide
 
+## Quick Start: Standard File Organization
+
+For easiest pipeline execution, organize your sperm cell folders using this standard structure:
+
+```
+Sperm {sperm_id}/
+├── pseudopod_stack_{sperm_id}.tif              (single version)
+├── nucleus_stack_{sperm_id}.tif                (single version)
+├── sperm_cell_stack_{sperm_id}.tif             (single version)
+│
+├── MO_stack_{sperm_id}_registration.tif        ⚠️ REQUIRED FOR TRACKING
+├── MO_stack_{sperm_id}.tif                     ⚠️ REQUIRED FOR 3D RECONSTRUCTION
+│
+├── mitochondria_stack_{sperm_id}_registration.tif ⚠️ REQUIRED FOR TRACKING
+├── mitochondria_stack_{sperm_id}.tif           ⚠️ REQUIRED FOR 3D RECONSTRUCTION
+│
+├── MO tracking/
+│   └── temp_long.csv                           (or any naming)
+│
+└── Mito tracking/
+    └── temp_long.csv                           (or any naming)
+```
+
+**Key requirement**: For **mitochondria and MO**, you MUST have **both versions** in your folder:
+- **`_registration` version**: Used for tracking organelles across Z-slices (jump corrections applied)
+- **No suffix version**: Used for 3D reconstruction and spatial analysis (preserves original coordinates)
+
+If you're missing one version, the pipeline will fail with a "No file found" error.
+
+---
+
 ## Overview
 
 The pipeline uses **flexible file naming conventions** that accept variations in:
@@ -16,7 +47,7 @@ However, the **registered vs. unregistered distinction remains strict** because 
 ## TIFF File Naming
 
 ### Single Organelles (Always Unregistered)
-These are always found unregistered because they don't need registration:
+These organelles only need one version because they are single instances:
 
 | Organelle | Acceptable Patterns |
 |-----------|-------------------|
@@ -24,16 +55,20 @@ These are always found unregistered because they don't need registration:
 | **Nucleus** | `nucleus_stack_16.tif`, `nucleus_16.tif`, `Nucleus_stack_16.tif`, `nucleus stack 16.tif` |
 | **Sperm Cell** | `sperm_cell_stack_16.tif`, `sperm_cell_16.tif`, `sperm cell stack 16.tif` |
 
-### Multiple Organelles (Can Be Registered OR Unregistered)
+### Multiple Organelles (BOTH Versions Required)
+
+**You MUST provide both versions for each organelle**. The pipeline needs:
+1. **Registered version** (`_registration` suffix): For tracking across Z-slices
+2. **Unregistered version** (no suffix): For 3D reconstruction
 
 | Organelle | **For Tracking (Registered)** | **For 3D (Unregistered)** |
 |-----------|------------------------------|-------------------------|
 | **MO** | `MO_stack_16_registration.tif`, `mo_stack_16_registration.tif`, `MO_16_registration.tif` | `MO_stack_16.tif`, `MO_16.tif`, `mo_stack_16.tif` |
 | **Mitochondria** | `mitochondria_stack_16_registration.tif`, `Mito_16_registration.tif`, `mitochondria_16_registration.tif` | `mitochondria_stack_16.tif`, `mitochondria_16.tif`, `mito_16.tif` |
 
-**Key Point**: The presence of `_registration` suffix determines which version is used. The code automatically selects:
-- Registered versions when tracking
-- Unregistered versions when reconstructing
+**Why both versions?**
+- **Registered**: Image registration (stackreg) corrects for SEM ribbon compression, eliminating coordinate jumps. Critical for tracking.
+- **Unregistered**: Original voxel coordinates match your 3D reconstruction goal. Needed for accurate spatial positions and distances.
 
 ---
 
@@ -56,44 +91,40 @@ Subdirectory locations:
 
 | Rule | Why It Matters |
 |------|----------------|
-| **`_registration` suffix is STRICT** | Tracking needs registered (jump-corrected) data; 3D reconstruction needs unregistered (spatial accuracy). Mixing these breaks results. |
+| **Both versions required for multi-instance organelles** | Tracking and 3D reconstruction use different versions. Missing either breaks the analysis. |
+| **`_registration` suffix is STRICT** | Tracking needs registered (jump-corrected) data; 3D reconstruction needs unregistered (spatial accuracy). Mixing breaks results. |
 | **Organelle type must match** | Pipeline handles each organelle type differently (single vs. multiple instance detection). |
 | **Sperm ID must match** | Prevents accidental mixing of data from different cells. |
 | **Case/spacing is flexible** | Makes naming more forgiving; "MO_16.tif" and "mo 16.tif" both work. |
 
-### 🔆 Everything Else is FLEXIBLE
-- Capitalization
-- Spacing (`_` vs spaces)
-- Optional "stack" keyword
-- File organization (subdirectories)
+---
 
 ---
 
-## Recommended Best Practices
-
-While flexible naming is supported, consistency helps readability:
-
-### Suggested Standard Format
-```
-Sperm {sperm_id}/
-├── pseudopod_stack_{sperm_id}.tif
-├── nucleus_stack_{sperm_id}.tif
-├── sperm_cell_stack_{sperm_id}.tif
-├── MO_stack_{sperm_id}_registration.tif
-├── MO_stack_{sperm_id}.tif
-├── mitochondria_stack_{sperm_id}_registration.tif
-├── mitochondria_stack_{sperm_id}.tif
-├── MO tracking/
-│   └── temp_long.csv
-└── Mito tracking/
-    └── temp_long.csv
-```
-
-This format:
-- ✅ Clearly distinguishes registered vs. unregistered
-- ✅ Uses consistent naming across all cells
-- ✅ Works with flexible file discovery
-- ✅ Easy to maintain and audit
-
 ---
+
+## Troubleshooting
+
+### "No [organelle] file found" Error
+**Cause**: File naming doesn't match expected pattern or file doesn't exist.
+
+**Solutions**:
+- Check file exists in correct directory: `Sperm {sperm_id}/`
+- Verify organelle name matches accepted names (nucleus, pseudopod, mitochondria, MO, sperm_cell)
+- **For mitochondria/MO**: Ensure you have BOTH versions present (`_registration` AND without suffix)
+- Verify registration suffix if applicable
+- Check for typos and correct file extension (`.tif`, not `.tiff`)
+
+### "Multiple files found, using first"
+**Cause**: Duplicate files with same organelle/sperm_id exist in directory.
+
+**Solution**: Remove duplicate files or rename to distinguish them.
+
+### Wrong Version Selected (Registered vs. Unregistered)
+**Cause**: Code selected wrong version of file (registered when it needed unregistered, or vice versa).
+
+**Solutions**:
+- Verify files have correct `_registration` suffix in their names
+- Check that tracking CSVs are in correct subdirectories (`MO tracking/` or `Mito tracking/`)
+- If metrics look wrong, verify overlays in TRACKING_OVERLAY_GUIDE.md
 

@@ -1,6 +1,6 @@
 # Sperm Cell 3D Morphometric Analysis Pipeline
 
-A comprehensive Python pipeline for automated 3D morphometric analysis of sperm cells from scanning electron microscopy (SEM) image stacks. This tool processes segmented organelle masks, tracking data, and microscopy parameters to compute detailed cellular and organellar metrics, enabling quantitative assessment of sperm cell morphology and spatial organization.
+Automated 3D morphometric analysis of sperm cells from SEM image stacks. This pipeline processes binary segmentation masks (derived from Detectron2 predictions or manual segmentation), tracking data, and microscopy calibration to compute detailed cellular and organellar metrics. Enables quantitative assessment of sperm cell morphology, spatial organization, and organellar relationships through 3D reconstruction and morphological analysis.
 
 **Key Features:**
 - 🔍 **Multi-organelle analysis** with automatic single vs. multiple instance detection
@@ -10,6 +10,7 @@ A comprehensive Python pipeline for automated 3D morphometric analysis of sperm 
 - 🔄 **Flexible file naming** that accommodates various naming conventions
 - ✅ **Centralized configuration** with single source of truth for all parameters
 - 🔎 **Tracking verification** with overlay images to ensure data quality before metrics
+- 🧠 **Optional Detectron2 integration** for automated mask generation from raw SEM images
 
 **Documentation Files:**
 - [README.md](README.md) - This file, complete pipeline reference
@@ -26,14 +27,15 @@ A comprehensive Python pipeline for automated 3D morphometric analysis of sperm 
 2. [Preprocessing Pipeline](#preprocessing-pipeline)
 3. [Installation](#installation)
 4. [Quick Start](#quick-start)
-5. [Architecture](#architecture)
-6. [Usage Guide](#usage-guide)
-7. [Output Description](#output-description)
-8. [Metrics Reference](#metrics-reference)
-9. [File Organization](#file-organization)
-10. [Tracking Overlay Verification](#tracking-overlay-verification)
-11. [Troubleshooting](#troubleshooting)
-12. [Citation](#citation)
+5. [Detectron2 Mask Generation](#detectron2-mask-generation-optional)
+6. [Architecture](#architecture)
+7. [Usage Guide](#usage-guide)
+8. [Output Description](#output-description)
+9. [Metrics Reference](#metrics-reference)
+10. [File Organization](#file-organization)
+11. [Tracking Overlay Verification](#tracking-overlay-verification)
+12. [Troubleshooting](#troubleshooting)
+13. [Citation](#citation)
 
 ---
 
@@ -185,7 +187,9 @@ See `src/config.py` for complete parameter list with documentation.
 
 ## Quick Start
 
-### Analyze a Single Sperm Cell
+### Option 1: Analyze Pre-Generated Masks
+
+If you already have binary segmentation masks (from Detectron2 or manual segmentation):
 
 ```python
 from src.utils import get_file_paths
@@ -222,8 +226,11 @@ for org_name, stack_path, csv_path in organelle_inputs:
 metrics_df = pd.concat(all_metrics, ignore_index=True)
 ```
 
-### Run Full Jupyter Notebook
-Start the interactive pipeline:
+### Option 2: Generate Masks with Detectron2 (Optional)
+
+See [Detectron2 Mask Generation Guide](#detectron2-mask-generation-optional) below.
+
+### Option 3: Run Full Interactive Pipeline
 ```bash
 jupyter notebook Sperm_Cell_Analysis_Pipeline.ipynb
 ```
@@ -473,6 +480,72 @@ $$d = \sqrt{(x_1-x_2)^2 + (y_1-y_2)^2 + (z_1-z_2)^2}$$
 - Origin: Sperm cell centroid
 - Units: Micrometers
 - Used for distance calculations
+
+---
+
+## Detectron2 Mask Generation (Optional)
+
+### Overview
+
+This pipeline can work with binary segmentation masks from **any source** (manual segmentation, thresholding, or deep learning). However, we provide a **Detectron2-based instance segmentation model** trained on sperm cell SEM images for automated mask generation.
+
+**Key Features:**
+- ✅ **Instance segmentation**: Separately identifies individual organelles
+- ✅ **Multi-class prediction**: Nucleus, pseudopod, mitochondria, MO, sperm cell
+- ✅ **Colab-based**: Free GPU access, no local hardware required
+- ✅ **High accuracy**: Trained on manually curated SEM image stacks
+
+### Getting Started with Colab
+
+1. **Open the template notebook:**
+   - [Detectron2_Mask_Generation_Colab.ipynb](Detectron2_Mask_Generation_Colab.ipynb) (in this repository)
+   - Or open it directly in Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ariellerothman/sperm-cell-analysis/blob/main/Detectron2_Mask_Generation_Colab.ipynb)
+
+2. **Request Model Weights:**
+   - Email: [your email] with subject "Sperm Cell Detectron2 Model Request"
+   - Include: Brief description of your use case
+   - We'll provide download instructions for the trained model weights
+
+3. **Generate Masks:**
+   - Update paths in the Colab notebook
+   - Run all cells
+   - Download generated mask stacks from Google Drive
+   - Use them with the main analysis pipeline
+
+### Detectron2 Workflow
+
+```
+Raw SEM Images (TIFF stack)
+        ↓
+[Detectron2 in Colab]
+        ↓
+Binary Mask Stacks (.tif)
+        ↓
+[Sperm Cell Analysis Pipeline]
+        ↓
+Metrics & 3D Reconstruction
+```
+
+### Model Details
+
+**Architecture**: Mask R-CNN with ResNet-50 FPN  
+**Training Data**: ~50 manually curated sperm cell SEM stacks  
+**Classes**: Nucleus, Pseudopod, Mitochondria, Mitochondrial Organelle (MO), Sperm Cell, Unfused MO  
+**Input Size**: 1024×1024 pixels  
+**Performance**: ~2-5 minutes per 200-slice stack (with GPU in Colab)
+
+### Requesting Model Weights
+
+To request the pre-trained Detectron2 model weights:
+
+**Email**: [ariellerothman@gmail.com]  
+**Subject**: "Sperm Cell Analysis - Model Weights Request"  
+**Include**:
+- Your name and institution
+- Brief description of your project
+- Use case (research, publication, etc.)
+
+We'll respond with download instructions. Weights are distributed freely for research purposes.
 
 ---
 

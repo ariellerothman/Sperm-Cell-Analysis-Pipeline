@@ -41,7 +41,7 @@ Automated 3D morphometric analysis of sperm cells from SEM image stacks. This pi
 
 ## Biological Context
 
-This pipeline analyzes **sperm cells** and their subcellular structures (mitochondria, mitochondrial organelles, nucleus, pseudopod) to quantify morphological features relevant to cellular function and reproductive biology. Key biological measures include:
+This pipeline analyzes **sperm cells** and their subcellular structures (mitochondria, membranous organelles, nucleus, pseudopod) to quantify morphological features relevant to cellular function and reproductive biology. Key biological measures include:
 
 - **Distance to spermathecal valve**: Measures sperm positioning relative to the reproductive structure, indicating potential for successful fertilization
 - **Pseudopod orientation**: Determines directional bias of the sperm tail toward or away from the spermathecal valve
@@ -60,7 +60,7 @@ Each sperm cell undergoes extensive preprocessing before analysis:
 - Individual sperm cells are cropped from large SEM image stacks
 - Each cell assigned a unique numerical ID
 - Multi-class image segmentation performed using a fine-tuned **Detectron2 model** (PyTorch-based instance segmentation)
-- Model outputs predictions for: nucleus, pseudopod, mitochondria, mitochondrial organelles (MO), and sperm cell boundary
+- Model outputs predictions for: nucleus, pseudopod, mitochondria, membranous organelles (MO), and sperm cell boundary
 - Segmentations exported as binary mask TIFF stacks (one per organelle type, per sperm cell)
 
 **Reference**: Detectron2 (https://github.com/facebookresearch/detectron2)
@@ -247,8 +247,7 @@ Then follow the step-by-step instructions in the notebook.
 sperm-cell-analysis/
 ├── src/                                    # Core analysis modules
 │   ├── config.py                          # Configuration parameters
-│   ├── utils.py                           # Utility functions (file I/O, voxel conversion)
-│   ├── analysis_utils.py                  # Data loading and preprocessing
+│   ├── utils.py                           # Utility functions (file I/O, voxel conversion, data loading)
 │   ├── metrics.py                         # Organelle metrics computation
 │   ├── spatial_metrics.py                 # Distance-to-valve calculations
 │   ├── tracking.py                        # Mtrack2 CSV parsing and conversion
@@ -285,14 +284,8 @@ sperm-cell-analysis/
 - `save_excel(df, filepath)`: Exports DataFrames to Excel with formatting
 - `voxels_to_micrometers(coords)`: Converts voxel coordinates to physical units
 - `get_centroid(stack)`: Computes 3D centroid from binary mask
-
-#### `src/analysis_utils.py`
-**Purpose**: Data loading, preprocessing, and TIFF stack utilities.
-
-**Key Functions**:
-- `get_centroid_from_roi(roi_path)`: Loads ImageJ ROI files
-- `load_organelle_stack(filepath, preprocess=False)`: Loads stacks with optional filtering
-- `load_tracking_data(csv_path)`: Reads Mtrack2 CSV output
+- `find_file_by_pattern(folder, organelle, sperm_id, registered, exclude_pattern)`: Finds TIFF files with flexible naming conventions
+- `find_csv_by_pattern(folder, organelle, sperm_id)`: Finds tracking CSV files
 
 #### `src/metrics.py`
 **Purpose**: Computes morphological metrics for all organelles.
@@ -530,7 +523,7 @@ Metrics & 3D Reconstruction
 
 **Architecture**: Mask R-CNN with ResNet-50 FPN  
 **Training Data**: ~50 manually curated sperm cell SEM stacks  
-**Classes**: Nucleus, Pseudopod, Mitochondria, Mitochondrial Organelle (MO), Sperm Cell, Unfused MO  
+**Classes**: Nucleus, Pseudopod, Mitochondria, Membranous Organelle (MO), Sperm Cell, Unfused MO  
 **Input Size**: 1024×1024 pixels  
 **Performance**: ~2-5 minutes per 200-slice stack (with GPU in Colab)
 
@@ -584,7 +577,7 @@ The pipeline provides three main workflows:
 - `batch_results_all_cells/all_metrics_batch.xlsx` (all cells + metrics combined)
 
 ### Workflow 3: Unfused MO Analysis (Optional)
-**Use when**: Analyzing unfused mitochondrial organelle (MO) data separately.
+**Use when**: Analyzing unfused membranous organelle (MO) data separately.
 
 **Steps**:
 1. Specify which sperm cells have unfused MO data in Step 4
@@ -648,7 +641,7 @@ The pipeline provides three main workflows:
 - 🟤 Brown/Dark Green: Pseudopod
 - ⚫ Black: Nucleus
 - 🟠 Orange: Mitochondria
-- 🟣 Purple: Mitochondrial organelles (MO)
+- 🟣 Purple: Membranous organelles (MO)
 
 ---
 
@@ -787,7 +780,7 @@ Project Root/
 │   ├── tracking.py                        (tracking CSV processing)
 │   ├── reconstruction.py                  (3D mesh & visualization)
 │   ├── detectron_inference.py            (model inference helpers)
-│   └── analysis_utils.py                  (analysis utilities)
+│   └── utils.py                           # Utility functions
 │
 ├── Sample Data/
 │   └── Sperm {ID}/

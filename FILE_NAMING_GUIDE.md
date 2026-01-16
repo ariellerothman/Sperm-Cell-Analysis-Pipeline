@@ -12,16 +12,16 @@ Sperm {sperm_id}/
 │
 ├── MO_stack_{sperm_id}_registration.tif        ⚠️ REQUIRED FOR TRACKING
 ├── MO_stack_{sperm_id}.tif                     ⚠️ REQUIRED FOR 3D RECONSTRUCTION
+├── MO_tracking_16.csv                          ⚠️ REQUIRED FOR TRACKING
 │
 ├── mitochondria_stack_{sperm_id}_registration.tif ⚠️ REQUIRED FOR TRACKING
-├── mitochondria_stack_{sperm_id}.tif           ⚠️ REQUIRED FOR 3D RECONSTRUCTION
+├── mitochondria_stack_{sperm_id}.tif              ⚠️ REQUIRED FOR 3D RECONSTRUCTION
+├── mito_tracking_16.csv                           ⚠️ REQUIRED FOR TRACKING
 │
 ├── MO tracking/
-│   ├── MTrackJ_output_16_MO.csv                (original ImageJ output)
 │   └── temp_long.csv                           (processed/filtered tracking)
 │
 └── Mito tracking/
-    ├── MTrackJ_output_16_mito.csv              (original ImageJ output)
     └── temp_long.csv                           (processed/filtered tracking)
 ```
 

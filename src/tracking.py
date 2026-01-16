@@ -50,14 +50,14 @@ def find_input_csv(cell_dir: str, organelle: str, cell_number: int) -> str:
     matches = [f for f in matches if f.lower().endswith('.csv')]
 
     if matches:
-        print(f"✅ Found input CSV: {matches[0]}")
+        print(f"Found input CSV: {matches[0]}")
         return matches[0]
 
     # Print available CSVs to help debug
     debug_files = [f for f in os.listdir(cell_dir) if f.lower().endswith('.csv')]
-    print(f"🧐 Available CSV files in {cell_dir}: {debug_files}")
+    print(f"Available CSV files in {cell_dir}: {debug_files}")
 
-    raise FileNotFoundError(f"🚫 Could not find CSV for {organelle} in {cell_dir}")
+    raise FileNotFoundError(f"Could not find CSV for {organelle} in {cell_dir}")
 
 def move_tracks_horizontally(
     input_csv: str, output_csv: str, tracks_per_block: int = TRACKING_BLOCK_SIZE,
@@ -201,7 +201,7 @@ def visualize_tracking(
         plt.close(fig)
     
     if save_overlays:
-        print(f"✅ Tracking overlays saved to: {overlay_dir}")
+        print(f"Tracking overlays saved to: {overlay_dir}")
         return overlay_dir
     else:
         return None
@@ -227,17 +227,17 @@ def run_tracking_pipeline(
     
     cell_dir = os.path.join(base_dir, f"Sperm {cell_number}")
 
-    # ✅ Find input CSV
+    # Find input CSV
     csv_in = find_input_csv(cell_dir, organelle, cell_number)
 
-    # ✅ Find registered TIFF (needed for tracking visualization)
+    # Find registered TIFF (needed for tracking visualization)
     try:
         tiff_in = find_file_by_pattern(cell_dir, organelle, cell_number, registered=True)
     except FileNotFoundError:
         tiff_in = None
-        print(f"⚠️ No registered TIFF found for {organelle} (visualization skipped)")
+        print(f"No registered TIFF found for {organelle} (visualization skipped)")
     
-    # ✅ Define intermediate CSV paths
+    # Define intermediate CSV paths
     wide_csv = os.path.join(cell_dir, f"{organelle}_temp_wide.csv")
     long_csv = os.path.join(cell_dir, f"{organelle}_temp_long.csv")
 

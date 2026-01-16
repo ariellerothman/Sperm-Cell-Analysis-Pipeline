@@ -60,4 +60,4 @@ def run_stack_inference(predictor, image_stack_path, output_base_dir, class_name
     for class_name, mask_stack in combined_masks_dict.items():
         stack_path = os.path.join(output_base_dir, class_name, f"{class_name}_stack.tif")
         tifffile.imwrite(stack_path, np.array(mask_stack))
-        print(f"✅ Saved {class_name} stack: {stack_path}")
+        print(f"Saved {class_name} stack: {stack_path}")

@@ -83,7 +83,7 @@ def find_file_by_pattern(folder: str, organelle: str, sperm_id: int, registered:
     reg_status = "registered" if registered else "unregistered"
     exclude_msg = f" (excluding '{exclude_pattern}')" if exclude_pattern else ""
     raise FileNotFoundError(
-        f"❌ No {reg_status} {organelle} file for sperm {sperm_id} in: {folder}{exclude_msg}\n"
+        f"No {reg_status} {organelle} file for sperm {sperm_id} in: {folder}{exclude_msg}\n"
         f"   💡 Expected: organelle name + sperm ID in filename (case-insensitive)\n"
         f"   💡 Available TIFFs: {sorted([f for f in os.listdir(folder) if f.lower().endswith('.tif')])}"
     )
@@ -223,7 +223,7 @@ def get_unfused_mo_path(sperm_id: int, base_dir: str, registered: bool = False) 
     
     reg_status = "registered" if registered else "unregistered"
     raise FileNotFoundError(
-        f"❌ No {reg_status} unfused MO file for sperm {sperm_id} in: {folder}\n"
+        f"No {reg_status} unfused MO file for sperm {sperm_id} in: {folder}\n"
         f"   💡 Expected filename to contain: 'unfused', 'MO', and '{sperm_id}' (case-insensitive)\n"
         f"   💡 Available TIFFs: {sorted([f for f in os.listdir(folder) if f.lower().endswith('.tif')])}"
     )

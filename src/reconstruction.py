@@ -53,7 +53,7 @@ def extract_mesh_inside_sperm(
     lbl = measure.label(binar, connectivity=1)
     props = measure.regionprops(lbl)
     if not props:
-        print(f"⚠️ Warning: No objects found in {os.path.basename(path)}")
+        print(f"Warning: No objects found in {os.path.basename(path)}")
         return None, None
     keep_labels = [p.label for p in props if p.area >= min_sz]
     mask = np.isin(lbl, keep_labels)
@@ -95,7 +95,7 @@ def extract_mesh(
     lbl = measure.label(binar, connectivity=1)
     props = measure.regionprops(lbl)
     if not props:
-        print(f"⚠️ No objects found in {os.path.basename(path)}")
+        print(f"No objects found in {os.path.basename(path)}")
         return None, None
     keep_labels = [p.label for p in props if p.area >= min_sz]
     mask = np.isin(lbl, keep_labels)
@@ -143,7 +143,7 @@ def build_3d_scene(
                     o["path"], voxel_size, min_sz, thr_m, o.get("blur", 0.0), close_r
                 )
             if v is not None and f is not None:
-                print(f"  ✓ {o['name']}: {v.shape[0]} verts, {f.shape[0]} faces")
+                print(f"  {o['name']}: {v.shape[0]} verts, {f.shape[0]} faces")
                 faces_pv = np.hstack([np.full((f.shape[0], 1), 3), f]).astype(np.int64)
                 mesh = pv.PolyData(v, faces_pv)
                 plotter.add_mesh(
@@ -160,10 +160,10 @@ def build_3d_scene(
             print(f"  ✗ {o['name']}: Error during extraction - {str(e)[:60]}")
     
     if mesh_count == 0:
-        print("\n⚠️  WARNING: No meshes were successfully extracted!")
+        print("\nWARNING: No meshes were successfully extracted!")
         print("   Check that organelle files exist and contain valid data.")
     else:
-        print(f"\n✓ Successfully extracted {mesh_count} organelle meshes")
+        print(f"\nSuccessfully extracted {mesh_count} organelle meshes")
     
     return plotter
 
@@ -182,7 +182,7 @@ def render_orbit_video(
         fps: Frames per second.
     """
     if len(plotter.actors) == 0:
-        raise ValueError("❌ Plotter has no meshes to render")
+        raise ValueError("Plotter has no meshes to render")
     
     print(f"🎥 Rendering {num_frames}-frame orbit video...")
     
@@ -207,19 +207,19 @@ def render_orbit_video(
                 frames.append(img)
                 
                 if (i + 1) % 15 == 0:
-                    print(f"  ✓ Frame {i + 1}/{num_frames}")
+                    print(f"  Frame {i + 1}/{num_frames}")
                     
             except Exception as e:
-                print(f"⚠️  Error on frame {i + 1}: {str(e)[:60]}")
+                print(f"Error on frame {i + 1}: {str(e)[:60]}")
                 continue
         
         if len(frames) == 0:
-            raise ValueError("❌ No frames were captured")
+            raise ValueError("No frames were captured")
         
         # Save video
         print(f"💾 Saving {len(frames)} frames to video...")
         imageio.mimsave(output_path, frames, fps=fps)
-        print(f"✅ Video saved successfully! ({len(frames)} frames)")
+        print(f"Video saved successfully! ({len(frames)} frames)")
         
     except Exception as e:
-        raise ValueError(f"❌ Video rendering failed: {str(e)}")
+        raise ValueError(f"Video rendering failed: {str(e)}")

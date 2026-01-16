@@ -3,14 +3,14 @@
 Automated 3D morphometric analysis of sperm cells from SEM image stacks. This pipeline processes binary segmentation masks (derived from Detectron2 predictions or manual segmentation), tracking data, and microscopy calibration to compute detailed cellular and organellar metrics. Enables quantitative assessment of sperm cell morphology, spatial organization, and organellar relationships through 3D reconstruction and morphological analysis.
 
 **Key Features:**
-- 🔍 **Multi-organelle analysis** with automatic single vs. multiple instance detection
-- 📊 **Comprehensive metrics** including volume, surface area, sphericity, density, and spatial relationships
-- 🎬 **3D visualization** with interactive orbit videos of cellular reconstructions
-- 📈 **Batch processing** for efficient analysis of multiple sperm cells
-- 🔄 **Flexible file naming** that accommodates various naming conventions
-- ✅ **Centralized configuration** with single source of truth for all parameters
-- 🔎 **Tracking verification** with overlay images to ensure data quality before metrics
-- 🧠 **Optional Detectron2 integration** for automated mask generation from raw SEM images
+- **Multi-organelle analysis** with automatic single vs. multiple instance detection
+- **Comprehensive metrics** including volume, surface area, sphericity, density, and spatial relationships
+- **3D visualization** with interactive orbit videos of cellular reconstructions
+- **Batch processing** for efficient analysis of multiple sperm cells
+- **Flexible file naming** that accommodates various naming conventions
+- **Centralized configuration** with single source of truth for all parameters
+- **Tracking verification** with overlay images to ensure data quality before metrics
+- **Optional Detectron2 integration** for automated mask generation from raw SEM images
 
 **Documentation Files:**
 - [README.md](README.md) - This file, complete pipeline reference

@@ -29,6 +29,10 @@ Sperm {sperm_id}/
 - **`_registration` version**: Used for tracking organelles across Z-slices (jump corrections applied)
 - **No suffix version**: Used for 3D reconstruction and spatial analysis (preserves original coordinates)
 
+**Why both versions?**
+- **Registered**: Image registration (stackreg) corrects for SEM ribbon compression, eliminating coordinate jumps. Critical for tracking.
+- **Unregistered**: Original voxel coordinates match your 3D reconstruction goal. Needed for accurate spatial positions and distances.
+
 If you're missing one version, the pipeline will fail with a "No file found" error.
 
 ---
@@ -67,10 +71,6 @@ These organelles only need one version because they are single instances:
 |-----------|------------------------------|-------------------------|
 | **MO** | `MO_stack_16_registration.tif`, `mo_stack_16_registration.tif`, `MO_16_registration.tif` | `MO_stack_16.tif`, `MO_16.tif`, `mo_stack_16.tif` |
 | **Mitochondria** | `mitochondria_stack_16_registration.tif`, `Mito_16_registration.tif`, `mitochondria_16_registration.tif` | `mitochondria_stack_16.tif`, `mitochondria_16.tif`, `mito_16.tif` |
-
-**Why both versions?**
-- **Registered**: Image registration (stackreg) corrects for SEM ribbon compression, eliminating coordinate jumps. Critical for tracking.
-- **Unregistered**: Original voxel coordinates match your 3D reconstruction goal. Needed for accurate spatial positions and distances.
 
 ---
 

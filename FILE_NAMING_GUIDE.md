@@ -132,24 +132,6 @@ Tracking overlays are your **quality control tool** for catching problems before
 3. **Spot registration issues**: Erratic circle motion reveals registration artifacts
 4. **Validate before batch processing**: Generate overlays for 1-2 cells before processing entire batch
 
-**Quick diagnostic workflow**:
-```
-Bad metrics for cell X
-        ↓
-Generate overlays for cell X
-        ↓
-Review overlays frame-by-frame
-        ↓
-  Does tracking look good?
-        ↙         ↘
-      YES          NO
-       ↓           ↓
-  Problem is    Problem is
-   in metrics   in tracking
-    or mask       or
-  segmentation  registration
-```
-
 ---
 
 ## When Strict Naming Matters
@@ -203,41 +185,3 @@ This format:
 
 ---
 
-## Troubleshooting
-
-### "No [organelle] file found" Error
-The file finder looks for:
-1. Files matching `*{organelle}*{sperm_id}*.tif`
-2. Correct registration status (registered or unregistered)
-
-**Solutions**:
-- Check file exists in correct directory: `Sperm {sperm_id}/`
-- Verify registration suffix if needed
-- Check for typos in organelle name
-- Ensure `.tif` extension (not `.tiff` or `.TIF`)
-
-### "Multiple files found, using first"
-If you have duplicate files with same organelle/sperm_id, the first alphabetical match is used.
-
-**Solution**: Remove duplicate files or rename to distinguish them.
-
-### Wrong Version Selected (Registered vs. Unregistered)
-If tracking seems wrong or 3D coordinates are misaligned, verify:
-- Tracking calls use `registered=True`
-- 3D reconstruction uses `registered=False`
-- File actually has correct suffix in name
-
----
-
-## Code Changes Made
-
-### `src/utils.py`
-- Added `find_file_by_pattern()`: Flexible TIFF file discovery
-- Added `find_csv_by_pattern()`: Flexible CSV discovery
-- Updated `get_file_paths()`: Uses new flexible functions
-
-### `src/tracking.py`
-- Updated `find_input_csv()`: Multiple glob pattern matching
-- Updated `run_tracking_pipeline()`: Uses flexible TIFF discovery
-
-Both modules now import `glob` for pattern matching and handle file discovery gracefully with informative error messages.

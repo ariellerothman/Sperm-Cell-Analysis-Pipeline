@@ -148,7 +148,7 @@ def compute_organelle_metrics(
                     rows_skipped += 1
             
             if rows_loaded == 0:
-                print(f"⚠️  Warning: No valid markers placed for {organelle_name} (loaded {rows_loaded}, skipped {rows_skipped})")
+                print(f"Warning: No valid markers placed for {organelle_name} (loaded {rows_loaded}, skipped {rows_skipped})")
                 labels = measure.label(binary_stack)
             else:
                 # Watershed algorithm: Groups all white pixels connected to each marker into one organelle

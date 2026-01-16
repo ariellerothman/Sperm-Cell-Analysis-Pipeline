@@ -75,5 +75,4 @@ Check overlays first. Saves hours of debugging.
 
 ---
 
-**For details**: [TRACKING_OVERLAY_GUIDE.md](TRACKING_OVERLAY_GUIDE.md)  
-**CSV reference**: [TRACKMATE_CSV_FORMAT.md](TRACKMATE_CSV_FORMAT.md)
+**For details**: [TRACKING_OVERLAY_GUIDE.md](TRACKING_OVERLAY_GUIDE.md)

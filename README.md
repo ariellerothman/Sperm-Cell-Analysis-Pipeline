@@ -19,7 +19,6 @@ Automated 3D morphometric analysis of sperm cells from SEM image stacks. This pi
 - [METRICS_REFERENCE.md](METRICS_REFERENCE.md) - Detailed metric definitions and formulas
 - [TRACKING_OVERLAY_GUIDE.md](TRACKING_OVERLAY_GUIDE.md) - Tracking verification guide
 - [TRACKING_OVERLAY_QUICKREF.md](TRACKING_OVERLAY_QUICKREF.md) - One-page tracking quick reference
-- [TRACKMATE_CSV_FORMAT.md](TRACKMATE_CSV_FORMAT.md) - TrackMate CSV format reference
 - [Detectron2_Mask_Generation_Colab.ipynb](Detectron2_Mask_Generation_Colab.ipynb) - Automated mask generation template
 
 ---

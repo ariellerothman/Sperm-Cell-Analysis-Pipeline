@@ -381,9 +381,7 @@ Frame 33:  Track 5 at position (160, 210) ← Back to normal area
 
 ## CSV Format Reference
 
-The pipeline processes TrackMate CSV files in specific formats. **For complete details on CSV format, structure, and validation, see [TRACKMATE_CSV_FORMAT.md](TRACKMATE_CSV_FORMAT.md).**
-
-Quick summary:
+The pipeline processes TrackMate CSV files in specific formats. Quick summary:
 - **Input**: Wide format with block separators (TrackMate raw export)
 - **Processing**: Remove separators → reorganize blocks → convert to long format
 - **Output**: Long format with columns: Frame, Track, X, Y, Flag

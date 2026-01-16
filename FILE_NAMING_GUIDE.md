@@ -2,7 +2,7 @@
 
 ## Overview
 
-Your pipeline now uses **flexible file naming conventions** that accept variations in:
+The pipeline uses **flexible file naming conventions** that accept variations in:
 - **Case**: `nucleus`, `Nucleus`, `NUCLEUS`
 - **Spacing**: `sperm cell`, `sperm_cell`, `spermcell`
 - **Optional "stack" keyword**: Files with or without the word "stack" in the name

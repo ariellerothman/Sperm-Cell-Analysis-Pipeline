@@ -481,10 +481,10 @@ $$d = \sqrt{(x_1-x_2)^2 + (y_1-y_2)^2 + (z_1-z_2)^2}$$
 This pipeline can work with binary segmentation masks from **any source** (manual segmentation, thresholding, or deep learning). However, we provide a **Detectron2-based instance segmentation model** trained on sperm cell SEM images for automated mask generation.
 
 **Key Features:**
-- ✅ **Instance segmentation**: Separately identifies individual organelles
-- ✅ **Multi-class prediction**: Nucleus, pseudopod, mitochondria, MO, sperm cell
-- ✅ **Colab-based**: Free GPU access, no local hardware required
-- ✅ **High accuracy**: Trained on manually curated SEM image stacks
+-  **Instance segmentation**: Separately identifies individual organelles
+-  **Multi-class prediction**: Nucleus, pseudopod, mitochondria, MO, sperm cell
+-  **Colab-based**: Free GPU access, no local hardware required
+-  **High accuracy**: Trained on manually curated SEM image stacks
 
 ### Getting Started with Colab
 

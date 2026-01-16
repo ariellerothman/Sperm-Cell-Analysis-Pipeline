@@ -19,7 +19,7 @@ visualize_tracking(
 
 ## What to Look For (One Page)
 
-| Good ✅ | Bad 🚨 |
+| Good  | Bad 🚨 |
 |---------|--------|
 | Red circles with IDs in most frames | Many white circles, few/no red circles |
 | Same ID across frames (track #5 = #5) | IDs suddenly change or disappear |

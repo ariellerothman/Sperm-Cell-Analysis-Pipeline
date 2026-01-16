@@ -34,7 +34,7 @@ Tracking directly feeds into metrics:
 2. Metrics code uses tracking to assemble 3D structure
 3. Bad tracking → bad 3D assembly → bad metrics
 
-### ✅ How Overlays Help
+###  How Overlays Help
 
 Overlays show exactly what the tracking system did, making problems obvious:
 - **Missing IDs** = organelles not tracked
@@ -75,7 +75,7 @@ mito_overlay_dir = visualize_tracking(
     output_dir="Sperm 14/Mito tracking"  # Optional: custom output location
 )
 
-print(f"✅ Overlays saved to: {mito_overlay_dir}")
+print(f" Overlays saved to: {mito_overlay_dir}")
 ```
 
 ---
@@ -103,7 +103,7 @@ Sperm {ID}/
 
 ## How to Interpret Overlays
 
-### ✅ Good Tracking Looks Like:
+###  Good Tracking Looks Like:
 
 1. **Consistent IDs across frames**
    - Track #5 appears in frames 5, 6, 7, 8 (same ID stays same)
@@ -283,7 +283,7 @@ def check_tracking_quality(csv_path, min_track_length=5):
             print(f"  - {issue}")
         return False
     else:
-        print("✅ Tracking quality looks good!")
+        print(" Tracking quality looks good!")
         return True
 
 # Use it:
@@ -296,7 +296,7 @@ check_tracking_quality("Sperm 14/Mito tracking/tracking.csv")
 
 **Tracking overlays are your detective tool for metrics problems.** Before assuming metrics code is broken, generate overlays and look with your own eyes. 90% of the time, the solution is obvious from the images:
 
-- ✅ **Overlays look great?** → Problem is elsewhere (check segmentation, masks, threshold)
+-  **Overlays look great?** → Problem is elsewhere (check segmentation, masks, threshold)
 - ❌ **Overlays look bad?** → Fix the root cause (registration, detection, segmentation)
 - Then re-run metrics with confidence
 
@@ -306,7 +306,7 @@ When in doubt, **visualize first, debug second.**
 
 ## Visual Examples
 
-### ✅ GOOD TRACKING: Consistent Across Frames
+###  GOOD TRACKING: Consistent Across Frames
 
 ```
 Frame 13:  Track IDs: 5, 19, 21, 23, 24, 25, 26, 27 (8 organelles)
@@ -316,10 +316,10 @@ Frame 16:  Track IDs: 1, 5, 19, 21, 22, 23, 24, 25, 27, 29 (10 organelles) ← 1
 ```
 
 **Analysis**:
-- ✅ IDs stay the same (track 5 is track 5 throughout)
-- ✅ New IDs appear naturally (new organelles enter field)
-- ✅ Population is stable
-- ✅ Smooth transitions between frames
+-  IDs stay the same (track 5 is track 5 throughout)
+-  New IDs appear naturally (new organelles enter field)
+-  Population is stable
+-  Smooth transitions between frames
 
 **Conclusion**: **SAFE TO USE FOR METRICS**
 

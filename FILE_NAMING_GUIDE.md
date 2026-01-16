@@ -6,23 +6,23 @@ For easiest pipeline execution, organize your sperm cell folders using this stan
 
 ```
 Sperm {sperm_id}/
-├── pseudopod_stack_{sperm_id}.tif              (single version)
-├── nucleus_stack_{sperm_id}.tif                (single version)
-├── sperm_cell_stack_{sperm_id}.tif             (single version)
+├── pseudopod_stack_{sperm_id}.tif                   (single version)
+├── nucleus_stack_{sperm_id}.tif                     (single version)
+├── sperm_cell_stack_{sperm_id}.tif                  (single version)
 │
-├── MO_stack_{sperm_id}_registration.tif        ⚠️ REQUIRED FOR TRACKING
-├── MO_stack_{sperm_id}.tif                     ⚠️ REQUIRED FOR 3D RECONSTRUCTION
-├── MO_tracking_16.csv                          ⚠️ REQUIRED FOR TRACKING
+├── MO_stack_{sperm_id}_registration.tif             REQUIRED FOR TRACKING
+├── MO_stack_{sperm_id}.tif                          REQUIRED FOR 3D RECONSTRUCTION
+├── MO_tracking_16.csv                               REQUIRED FOR TRACKING
 │
-├── mitochondria_stack_{sperm_id}_registration.tif ⚠️ REQUIRED FOR TRACKING
-├── mitochondria_stack_{sperm_id}.tif              ⚠️ REQUIRED FOR 3D RECONSTRUCTION
-├── mito_tracking_16.csv                           ⚠️ REQUIRED FOR TRACKING
+├── mitochondria_stack_{sperm_id}_registration.tif   REQUIRED FOR TRACKING
+├── mitochondria_stack_{sperm_id}.tif                REQUIRED FOR 3D RECONSTRUCTION
+├── mito_tracking_16.csv                             REQUIRED FOR TRACKING
 │
 ├── MO tracking/
-│   └── temp_long.csv                           (processed/filtered tracking)
+│   └── temp_long.csv                                (processed/filtered tracking)
 │
 └── Mito tracking/
-    └── temp_long.csv                           (processed/filtered tracking)
+    └── temp_long.csv                                (processed/filtered tracking)
 ```
 
 **Key requirement**: For **mitochondria and MO**, you MUST have **both versions** in your folder:

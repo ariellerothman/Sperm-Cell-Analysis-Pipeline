@@ -150,7 +150,7 @@ def compute_spatial_metrics(
             - pseudopod_tip_global: Pseudopod tip in global coordinates
             - distance_centroid_to_target_um: Distance in micrometers
             - distance_pseudopod_tip_to_target_um: Distance in micrometers
-            - angle_between_direction_and_target_vector_deg: Angle in degrees
+            - angle_between_direction_and_target_deg: Angle in degrees
     """
     # Get offsets from ROI (assumes crop from full image)
     offset_y, offset_x = get_crop_offset_from_roi(roi_path)
@@ -190,5 +190,5 @@ def compute_spatial_metrics(
         "pseudopod_tip_global": pseudopod_tip,
         "distance_centroid_to_target_um": dist_centroid,
         "distance_pseudopod_tip_to_target_um": dist_tip,
-        "angle_between_direction_and_target_vector_deg": angle_deg
+        "angle_between_direction_and_target_deg": angle_deg
     }

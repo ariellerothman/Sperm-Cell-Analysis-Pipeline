@@ -80,12 +80,12 @@ def compute_organelle_metrics(
     
     Returns:
         DataFrame with one row per labeled organelle object, containing:
-            - Sample_ID, Organelle_Type, Track_ID (unique ID for each instance)
-            - Volume_µm3, Surface_Area_µm2, Sphericity (morphological metrics)
-            - Centroid coordinates (z, y, x) in voxels
-            - Distances to pseudopod and nucleus (spatial relationships)
-            - BoundingBox_Volume_µm3, Density, Aspect_Ratio (shape descriptors)
-            - Direction_Vector components (z, y, x) (orientation for pseudopod only)
+            - sample_id, organelle_type, track_id (unique ID for each instance)
+            - volume_um3, surface_area_um2, sphericity (morphological metrics)
+            - centroid coordinates (z, y, x) in voxels
+            - distances to pseudopod and nucleus (spatial relationships)
+            - bounding_box_volume_um3, density, aspect_ratio (shape descriptors)
+            - direction_vector components (z, y, x) (orientation for pseudopod only)
     """
     # --- Load stack ---
     binary_stack = io.imread(segmentation_path)
@@ -196,22 +196,22 @@ def compute_organelle_metrics(
             surface_area = sphericity = np.nan
 
         results.append({
-            "Sample_ID": sample_id,
-            "Organelle_Type": organelle_name,
-            "Track_ID": track_id,
-            "Volume_µm3": volume,
-            "Surface_Area_µm2": surface_area,
-            "Sphericity": sphericity,
-            "Centroid_z": centroid[0],
-            "Centroid_y": centroid[1],
-            "Centroid_x": centroid[2],
-            "Distance_to_Pseudopod": dist_to_pod,
-            "Distance_to_Nucleus": dist_to_nuc,
-            "BoundingBox_Volume_µm3": bbox_volume,
-            "Density": density,
-            "Aspect_Ratio": aspect_ratio,
-            "Direction_Vector_z": direction_vector[0],
-            "Direction_Vector_y": direction_vector[1],
-            "Direction_Vector_x": direction_vector[2]
+            "sample_id": sample_id,
+            "organelle_type": organelle_name,
+            "track_id": track_id,
+            "volume_um3": volume,
+            "surface_area_um2": surface_area,
+            "sphericity": sphericity,
+            "centroid_z": centroid[0],
+            "centroid_y": centroid[1],
+            "centroid_x": centroid[2],
+            "distance_to_pseudopod": dist_to_pod,
+            "distance_to_nucleus": dist_to_nuc,
+            "bounding_box_volume_um3": bbox_volume,
+            "density": density,
+            "aspect_ratio": aspect_ratio,
+            "direction_vector_z": direction_vector[0],
+            "direction_vector_y": direction_vector[1],
+            "direction_vector_x": direction_vector[2]
         })
     return pd.DataFrame(results)

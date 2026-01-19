@@ -474,21 +474,21 @@ The pipeline provides three main workflows:
 **Columns**:
 | Column | Description | Units |
 |--------|-------------|-------|
-| Sample_ID | Unique sperm cell identifier | - |
-| Organelle_Type | Type of organelle (nucleus, pseudopod, mitochondria, MO, sperm_cell) | - |
-| Track_ID | Unique ID for each organelle instance (varies for multiple organelles) | - |
-| Volume_µm3 | Organelle volume | cubic micrometers |
-| Surface_Area_µm2 | Organelle surface area | square micrometers |
-| Sphericity | Measure of how spherical the organelle is (0-1, 1=perfect sphere) | - |
-| Centroid_z, _y, _x | 3D location of organelle center | voxels (convert to µm with VOXEL_SIZE) |
-| Distance_to_Pseudopod | Euclidean distance from organelle to pseudopod centroid | voxels |
-| Distance_to_Nucleus | Euclidean distance from organelle to nucleus centroid | voxels |
-| BoundingBox_Volume_µm3 | Volume of smallest box containing organelle | cubic micrometers |
-| Density | Ratio of organelle volume to bounding box volume (0-1) | - |
-| Aspect_Ratio | Ratio of longest to shortest dimension (≥1) | - |
-| Direction_Vector_z, _y, _x | Principal component direction (pseudopod only) | - |
+| sample_id | Unique sperm cell identifier | - |
+| organelle_type | Type of organelle (nucleus, pseudopod, mitochondria, mo, sperm_cell) | - |
+| track_id | Unique ID for each organelle instance (varies for multiple organelles) | - |
+| volume_um3 | Organelle volume | cubic micrometers |
+| surface_area_um2 | Organelle surface area | square micrometers |
+| sphericity | Measure of how spherical the organelle is (0-1, 1=perfect sphere) | - |
+| centroid_z, _y, _x | 3D location of organelle center | voxels (convert to µm with voxel_size) |
+| distance_to_pseudopod | Euclidean distance from organelle to pseudopod centroid | voxels |
+| distance_to_nucleus | Euclidean distance from organelle to nucleus centroid | voxels |
+| bounding_box_volume_um3 | Volume of smallest box containing organelle | cubic micrometers |
+| density | Ratio of organelle volume to bounding box volume (0-1) | - |
+| aspect_ratio | Ratio of longest to shortest dimension (≥1) | - |
+| direction_vector_z, _y, _x | Principal component direction (pseudopod only) | - |
 
-**Note**: For multiple organelles (mitochondria, MO), one row per organelle instance. For single organelles, one row per sperm cell.
+**Note**: For multiple organelles (mitochondria, mo), one row per organelle instance. For single organelles, one row per sperm cell.
 
 ### Spatial Metrics Excel
 **File**: `spatial_metrics.xlsx`

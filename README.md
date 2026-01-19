@@ -37,19 +37,6 @@ Automated 3D morphometric analysis of sperm cells from SEM image stacks. This pi
 
 ---
 
-## Biological Context
-
-This pipeline analyzes **sperm cells** and their subcellular structures (mitochondria, membranous organelles, nucleus, pseudopod) to quantify morphological features relevant to cellular function and reproductive biology. Key biological measures include:
-
-- **Distance to spermathecal valve**: Measures sperm positioning relative to the reproductive structure, indicating potential for successful fertilization
-- **Pseudopod orientation**: Determines directional bias of the sperm tail toward or away from the spermathecal valve
-- **Mitochondrial morphology**: Assesses fusion/fission status and metabolic capacity through shape metrics (sphericity, aspect ratio) and surface-area-to-volume ratios
-- **Spatial organization**: Quantifies relationships between organelles (distances to nucleus, clustering) to understand cellular compartmentalization
-
-The pipeline enables quantitative comparison of sperm morphology across samples, cell types, or treatment conditions.
-
----
-
 ## Preprocessing Pipeline
 
 Each sperm cell undergoes extensive preprocessing before analysis:
@@ -116,10 +103,9 @@ Sperm {ID}/
 ├── mitochondria_stack_{ID}.tif               (unregistered, curated)
 ├── MO_stack_{ID}_registration.tif            (registered, curated)
 ├── MO_stack_{ID}.tif                         (unregistered, curated)
-├── MO tracking/
-│   └── {tracking_data}.csv                   (from Mtrack2)
-└── Mito tracking/
-    └── {tracking_data}.csv                   (from Mtrack2)
+├── MO_tracking_{ID}.csv                      (from Mtrack2)
+├── Mito_Tracking_{ID}.csv                    (from Mtrack2)
+
 ```
 
 ---
@@ -352,27 +338,6 @@ sperm-cell-analysis/
 5. Render 60 frames at different angles (0° to 360°)
 6. Save as animated GIF
 
-### Data Flow Diagram
-
-```
-Raw TIFF Stacks (ImageJ)
-     ↓
-[Binary Masks + Tracking CSVs]
-     ↓
-     ├─→ src/metrics.py ─→ Volume, Surface Area, Sphericity
-     │   [compute_organelle_metrics()]
-     │
-     ├─→ src/spatial_metrics.py ─→ Distance to Valve
-     │   [compute_spatial_metrics()]
-     │
-     └─→ src/reconstruction.py ─→ 3D Mesh → Rotation Video
-        [create_3d_mesh_pyvista(), plot_3d_rotation()]
-     ↓
- Pandas DataFrame (metrics)
-     ↓
-Excel/CSV Output
-```
-
 ### Processing Pipeline (Detailed)
 
 1. **Load Data**
@@ -414,7 +379,7 @@ This pipeline can work with binary segmentation masks from manual segmentation o
 
 **Key Features:**
 -  **Instance segmentation**: Separately identifies individual organelles
--  **Multi-class prediction**: Nucleus, pseudopod, mitochondria, MO, sperm cell
+-  **Multi-class prediction**: Nucleus, pseudopod, mitochondria, MO, sperm cell, unfusedMO
 -  **Colab-based**: Free GPU access, no local hardware required
 -  **High accuracy**: Trained on manually curated SEM image stacks
 

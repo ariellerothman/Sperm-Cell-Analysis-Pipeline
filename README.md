@@ -21,20 +21,6 @@ Automated 3D morphometric analysis of sperm cells from SEM image stacks. This pi
 
 ---
 
-## Table of Contents
-
-1. [Biological Context](#biological-context)
-2. [Quick Start](#quick-start)
-3. [Detectron2 Mask Generation](#detectron2-mask-generation-optional)
-4. [Installation](#installation)
-5. [Architecture](#architecture)
-6. [Usage Guide](#usage-guide)
-7. [Output Description](#output-description)
-8. [Troubleshooting](#troubleshooting)
-9. [Citation](#citation)
-
----
-
 ## Preprocessing Pipeline
 
 Each sperm cell undergoes extensive preprocessing before analysis:

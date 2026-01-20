@@ -12,10 +12,10 @@ Automated 3D morphometric analysis of sperm cells from SEM image stacks. This pi
 
 **Documentation Files:**
 - [README.md](README.md) - Main reference (this file)
-- [FILE_NAMING_GUIDE.md](FILE_NAMING_GUIDE.md) - File naming conventions
-- [METRICS_REFERENCE.md](METRICS_REFERENCE.md) - Detailed metric definitions and formulas
-- [TRACKING_OVERLAY_GUIDE.md](TRACKING_OVERLAY_GUIDE.md) - Tracking verification guide
-- [Detectron2_Mask_Generation_Colab.ipynb](Detectron2_Mask_Generation_Colab.ipynb) - Automated mask generation template
+- [docs/FILE_NAMING_GUIDE.md](docs/FILE_NAMING_GUIDE.md) - File naming conventions
+- [docs/METRICS_REFERENCE.md](docs/METRICS_REFERENCE.md) - Detailed metric definitions and formulas
+- [docs/TRACKING_OVERLAY_GUIDE.md](docs/TRACKING_OVERLAY_GUIDE.md) - Tracking verification guide
+- [notebooks/Detectron2_Mask_Generation_Colab.ipynb](notebooks/Detectron2_Mask_Generation_Colab.ipynb) - Automated mask generation template
 
 ---
 

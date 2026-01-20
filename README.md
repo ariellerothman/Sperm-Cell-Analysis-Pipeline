@@ -92,6 +92,38 @@ Sperm {ID}/
 
 ---
 
+## Quick Start
+
+**Try the pipeline in 5 minutes without your own data:**
+
+```bash
+# 1. Clone and navigate
+git clone https://github.com/ariellerothman/Sperm-Cell-Analysis-Pipeline.git
+cd Sperm-Cell-Analysis-Pipeline
+
+# 2. Create and activate environment
+python -m venv env
+source env/bin/activate  # macOS/Linux
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Generate sample data
+python examples/generate_sample_data.py
+
+# 5. Open the notebook
+jupyter notebook notebooks/Sperm_Cell_Analysis_Pipeline.ipynb
+```
+
+Then in the notebook:
+- Set `sperm_id = 1` (Step 1)
+- Run cells through Step 3 to process the sample sperm cell
+- View generated metrics, 3D reconstruction, and tracking overlays
+
+See [TRACKING_OVERLAY_GUIDE.md](docs/TRACKING_OVERLAY_GUIDE.md) for detailed workflow documentation.
+
+---
+
 ## Installation
 
 ### Requirements

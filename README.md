@@ -7,8 +7,6 @@ Automated 3D morphometric analysis of sperm cells from SEM image stacks. This pi
 - **Comprehensive metrics** including volume, surface area, sphericity, density, and spatial relationships
 - **3D visualization** with interactive orbit videos of cellular reconstructions
 - **Batch processing** for efficient analysis of multiple sperm cells
-- **Flexible file naming** that accommodates various naming conventions
-- **Centralized configuration** with single source of truth for all parameters
 - **Tracking verification** with overlay images to ensure data quality before metrics
 - **Optional Detectron2 integration** for automated mask generation from raw SEM images
 

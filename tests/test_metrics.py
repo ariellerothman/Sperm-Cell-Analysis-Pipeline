@@ -54,19 +54,19 @@ class TestSyntheticMetrics:
     
     def test_centroid_of_symmetric_cube(self):
         """Test centroid calculation for a centered cube."""
-        # Create a simple binary mask (5x5x5 cube centered at (10,20,30))
+        # Create a simple binary mask (5x5x5 cube)
+        # Indices 8:13 gives elements [8,9,10,11,12], center at 10
         mask = np.zeros((20, 40, 40), dtype=bool)
         mask[8:13, 18:23, 28:33] = True
         
-        # Centroid should be approximately at (10.5, 20.5, 30.5)
-        # (accounting for 0-based indexing)
+        # Centroid should be at approximately (10, 20, 30)
         coords = np.argwhere(mask)
         centroid = coords.mean(axis=0)
         
         # Check that centroid is near the center of the cube
-        assert abs(centroid[0] - 10.5) < 0.1
-        assert abs(centroid[1] - 20.5) < 0.1
-        assert abs(centroid[2] - 30.5) < 0.1
+        assert abs(centroid[0] - 10.0) < 0.1
+        assert abs(centroid[1] - 20.0) < 0.1
+        assert abs(centroid[2] - 30.0) < 0.1
     
     def test_distance_between_two_points(self):
         """Test Euclidean distance calculation."""

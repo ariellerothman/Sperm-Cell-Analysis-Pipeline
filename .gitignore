@@ -180,3 +180,6 @@ cython_debug/
 .cursorignore
 .cursorindexingignore.DS_Store
 outputs/
+
+# Generated sample data (large TIFF stacks)
+examples/sample_sperm_001/

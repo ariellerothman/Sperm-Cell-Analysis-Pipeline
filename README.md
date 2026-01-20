@@ -101,8 +101,8 @@ Sperm {ID}/
 
 ### Step 1: Clone Repository
 ```bash
-git clone https://github.com/yourusername/sperm-cell-analysis.git
-cd sperm-cell-analysis
+git clone https://github.com/ariellerothman/Sperm-Cell-Analysis-Pipeline.git
+cd Sperm-Cell-Analysis-Pipeline
 ```
 
 ### Step 2: Create Virtual Environment (Recommended)
@@ -198,7 +198,7 @@ See [Detectron2 Mask Generation Guide](#detectron2-mask-generation-optional) bel
 
 ### Option 3: Run Full Interactive Pipeline
 ```bash
-jupyter notebook Sperm_Cell_Analysis_Pipeline.ipynb
+jupyter notebook notebooks/Sperm_Cell_Analysis_Pipeline.ipynb
 ```
 
 Then follow the step-by-step instructions in the notebook.
@@ -210,7 +210,7 @@ Then follow the step-by-step instructions in the notebook.
 ### Project Structure
 
 ```
-sperm-cell-analysis/
+Sperm-Cell-Analysis-Pipeline/
 ├── src/                                    # Core analysis modules
 │   ├── config.py                          # Configuration parameters
 │   ├── utils.py                           # Utility functions (file I/O, voxel conversion, data loading)
@@ -219,8 +219,13 @@ sperm-cell-analysis/
 │   ├── tracking.py                        # Mtrack2 CSV parsing and conversion
 │   ├── reconstruction.py                  # 3D mesh generation and visualization
 │   └── detectron_inference.py             # Detectron2 segmentation (if used)
-├── Sperm_Cell_Analysis_Pipeline.ipynb     # Main interactive analysis notebook
-├── Convert tracking and visualize.py      # Standalone tracking conversion script
+├── notebooks/
+│   ├── Sperm_Cell_Analysis_Pipeline.ipynb # Main interactive analysis notebook
+│   └── Detectron2_Mask_Generation_Colab.ipynb # Detectron2 mask generation
+├── docs/
+│   ├── FILE_NAMING_GUIDE.md               # File naming conventions
+│   ├── METRICS_REFERENCE.md               # Detailed metric definitions
+│   └── TRACKING_OVERLAY_GUIDE.md          # Tracking verification guide
 ├── requirements.txt                       # Python dependencies
 ├── README.md                              # This file
 └── outputs/
@@ -279,8 +284,8 @@ This pipeline can work with binary segmentation masks from manual segmentation o
 ### Getting Started with Colab
 
 1. **Open the template notebook:**
-   - [Detectron2_Mask_Generation_Colab.ipynb](Detectron2_Mask_Generation_Colab.ipynb) (in this repository)
-   - Or open it directly in Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ariellerothman/sperm-cell-analysis/blob/main/Detectron2_Mask_Generation_Colab.ipynb)
+   - [Detectron2_Mask_Generation_Colab.ipynb](notebooks/Detectron2_Mask_Generation_Colab.ipynb) (in this repository)
+   - Or open it directly in Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ariellerothman/Sperm-Cell-Analysis-Pipeline/blob/main/notebooks/Detectron2_Mask_Generation_Colab.ipynb)
 
 2. **Request Model Weights:**
    - Email: [your email] with subject "Sperm Cell Detectron2 Model Request"

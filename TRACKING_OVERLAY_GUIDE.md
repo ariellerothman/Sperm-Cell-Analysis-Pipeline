@@ -18,43 +18,41 @@ Tracking overlays are **PNG images** that show:
 
 ## How to Generate Overlays
 
-### Option 1: Use the Notebook (Easiest)
+### Option 1: Single Cell (Step 2e in Notebook)
 
-**Step 2e** in `Sperm_Cell_Analysis_Pipeline.ipynb` automatically generates overlays:
+**When to use**: Analyzing one sperm cell and want to verify tracking quality before running metrics.
+
+**Steps**:
+1. Set `sperm_id` in the configuration cell at the top of the notebook
+2. Go to **Step 2e: Visualize Tracking Overlays**
+3. Configure which organelles to visualize:
 
 ```python
-# Just change this to the cell you want to analyze
-sperm_id = 16  # (set in configuration cell)
-
-# Configure which organelles to visualize
 organelles_to_visualize = ["mitochondria", "MO"]  # or just ["mitochondria"]
-
-# Run the cell - overlays are generated automatically
-# Saved to: Sperm {ID}/{organelle} tracking/tracking_overlays/{organelle}_overlays/
 ```
 
-### Option 2: Generate Programmatically
+4. Run the cell - overlays are generated automatically
+5. Overlays saved to: `Sperm {ID}/{organelle} tracking/tracking_overlays/{organelle}_overlays/`
 
-```python
-from src.tracking import visualize_tracking
+### Option 2: Multiple Cells (Step 3 - Batch Processing)
 
-# Generate overlays for mitochondria
-mito_overlay_dir = visualize_tracking(
-    tiff_path="Sperm 14/mitochondria_stack_14_registration.tif",
-    csv_path="Sperm 14/Mito tracking/tracking.csv",
-    frames_to_display=200,  # Show first 200 frames
-    save_overlays=True,     # Save PNG files to disk
-    output_dir="Sperm 14/Mito tracking"  # Optional: custom output location
-)
+**When to use**: Analyzing many cells and want overlays for all of them automatically.
 
-print(f" Overlays saved to: {mito_overlay_dir}")
-```
+**What happens**:
+- Overlays are **automatically generated** while batch processing runs
+- No extra step needed—they're created as part of the standard workflow
+- Each cell gets overlays saved to the same directory structure
+- Status messages show: "Tracking overlays saved (mitochondria)" for each processed cell
+
+**Output**:
+- All overlays organized by sperm cell ID
+- Batch processing prints summary of where overlays were saved
 
 ---
 
 ## Where Overlays Are Stored
 
-All overlays follow the same directory structure:
+All overlays follow the same directory structure, whether generated via Option 1 or Option 2:
 
 ```
 Sperm {ID}/
